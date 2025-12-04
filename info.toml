@@ -1,0 +1,8 @@
+[meta]
+name = "Split Deltas"
+author = "Nixotica"
+category = "Overlay"
+version = "1.0.0"
+
+[script]
+dependencies = [ "MLFeedRaceData"]
