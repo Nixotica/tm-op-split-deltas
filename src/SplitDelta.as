@@ -38,7 +38,6 @@ namespace SplitDelta {
         
         // Detect run restart (CpCount goes back to 0)
         if (currentCpCount < lastCpCount) {
-            print("[Split Deltas] Run restarted - resetting previousDelta");
             previousDelta = 0;
         }
         
@@ -54,15 +53,11 @@ namespace SplitDelta {
     }
     
     void OnCheckpointCrossed(MLFeed::PlayerCpInfo_V4@ player, uint cpIndex) {
-        print("[Split Deltas] Checkpoint crossed: CP #" + cpIndex);
-        
         // Get current race time (total time since run start)
         int currentCpTime = player.CurrentRaceTime;
-        print("[Split Deltas] Current race time at CP: " + currentCpTime + "ms");
 
         // Need PB times to compare
         if (pbCheckpointTimes.Length == 0 || pbCheckpointTimes.Length < cpIndex) {
-            print("[Split Deltas] No PB data available (pbCheckpointTimes.Length=" + pbCheckpointTimes.Length + ")");
             hasNewSplitDelta = false;
             previousDelta = 0;
             return;
@@ -70,16 +65,13 @@ namespace SplitDelta {
         
         // Get PB checkpoint time
         int pbCpTime = pbCheckpointTimes[cpIndex - 1];
-        print("[Split Deltas] PB CP time: " + pbCpTime + "ms");
         
         // Calculate current delta (positive = slower than PB, negative = faster than PB)
         int currentDelta = currentCpTime - pbCpTime;
-        print("[Split Deltas] Current delta vs PB: " + currentDelta + "ms");
         
         // Calculate split delta (change in delta from previous checkpoint)
         // SKIP the first checkpoint - we don't show split delta for CP1
         if (cpIndex == 1) {
-            print("[Split Deltas] First checkpoint - storing delta but not displaying");
             previousDelta = currentDelta;
             hasNewSplitDelta = false;
             return;
@@ -87,7 +79,6 @@ namespace SplitDelta {
         
         // For CP2+: calculate the change in delta
         currentSplitDelta = currentDelta - previousDelta;
-        print("[Split Deltas] Split delta: " + currentSplitDelta + "ms (currentDelta=" + currentDelta + ", previousDelta=" + previousDelta + ")");
         
         // Update for next checkpoint
         previousDelta = currentDelta;
@@ -105,10 +96,6 @@ namespace SplitDelta {
                 pbCheckpointTimes.InsertLast(player.BestRaceTimes[i]);
             }
             pbFinishTime = player.BestTime;
-            print("[Split Deltas] Loaded PB with " + pbCheckpointTimes.Length + " CPs, finish: " + pbFinishTime);
-            for (uint i = 0; i < pbCheckpointTimes.Length; i++) {
-                print("[Split Deltas]   CP" + (i+1) + ": " + pbCheckpointTimes[i]);
-            }
         }
     }
     

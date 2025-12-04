@@ -20,13 +20,11 @@ namespace GUI {
 
     void Main() {
         font = nvg::LoadFont("Oswald-Regular.ttf");
-        print("[Split Deltas] GUI::Main() - Font loaded: " + (font != 0));
     }
     
     void ShowSplitDelta(int delta) {
         splitDelta = delta;
         showTime = Time::Now;
-        print("[Split Deltas] ShowSplitDelta called: " + delta + ", showTime=" + showTime);
     }
 
     void Render() {
