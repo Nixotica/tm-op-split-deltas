@@ -51,11 +51,12 @@ namespace GUI {
         }
         
         // Determine color based on split delta (negative = gained time = green)
-        currentColour = neutralColour;
-        if (splitDelta < -10) {  // Gained time (better)
+        if (splitDelta < 0) {  // Gained time (better)
             currentColour = fasterColour;
-        } else if (splitDelta > 10) {  // Lost time (worse)
+        } else if (splitDelta > 0) {  // Lost time (worse)
             currentColour = slowerColour;
+        } else {  // Exactly 0
+            currentColour = neutralColour;
         }
 
         if (!UI::IsGameUIVisible() && !showWhenGuiHidden) return;

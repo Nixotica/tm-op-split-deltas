@@ -12,6 +12,7 @@ namespace SplitDelta {
     // PB ghost checkpoint times
     array<int> pbCheckpointTimes;
     uint pbFinishTime = 0;
+    uint lastBestTime = 0;  // Track the last known PB to detect when it changes
     
     void Main() {}
     
@@ -46,15 +47,16 @@ namespace SplitDelta {
         }
         lastCpCount = currentCpCount;
         
-        // Load PB times if we don't have them yet
-        if (pbCheckpointTimes.Length == 0 && player.BestTime > 0) {
+        // Load PB times if we don't have them yet OR if the PB has been updated
+        if (player.BestTime > 0 && (pbCheckpointTimes.Length == 0 || player.BestTime != lastBestTime)) {
             LoadPBTimes(player);
+            lastBestTime = player.BestTime;
         }
     }
     
     void OnCheckpointCrossed(MLFeed::PlayerCpInfo_V4@ player, uint cpIndex) {
         // Get current race time (total time since run start)
-        int currentCpTime = player.CurrentRaceTime;
+        int currentCpTime = player.cpTimes[cpIndex];
 
         // Need PB times to compare
         if (pbCheckpointTimes.Length == 0 || pbCheckpointTimes.Length < cpIndex) {
@@ -106,5 +108,6 @@ namespace SplitDelta {
         hasNewSplitDelta = false;
         pbCheckpointTimes.Resize(0);
         pbFinishTime = 0;
+        lastBestTime = 0;
     }
 }
