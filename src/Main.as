@@ -12,7 +12,7 @@ void Update(float dt) {
 }
 
 void RenderMenu() {
-    if (UI::MenuItem("\\$f70" + Icons::AreaChart + "\\$z Split Deltas", "", GUI::enabled)) {
+    if (UI::MenuItem("\\$f70" + Icons::ClockO + "\\$z Split Deltas", "", GUI::enabled)) {
         GUI::enabled = !GUI::enabled;
     }
 }
