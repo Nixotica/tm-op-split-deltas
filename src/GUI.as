@@ -8,8 +8,8 @@ namespace GUI {
     vec4 shadowColour = vec4(0, 0, 0, .6);
     nvg::Font font;
 
-    int shadowX = 1;
-    int shadowY = 1;
+    int shadowOffsetX = 1;
+    int shadowOffsetY = 1;
     int fontSize = 34;
 
     int splitDelta = 0;
@@ -31,15 +31,19 @@ namespace GUI {
         // Check if in menu
         auto app = GetApp();
         if (app.RootMap is null || app.CurrentPlayground is null) return;
-        
+
+        if (!UI::IsGameUIVisible() && !showWhenGuiHidden) return;
+        if (font == 0) return;
+        if (!enabled) return;
+
+        // showTime is when the UI element was shown
+        if (Time::Now >= showTime + displayDuration) return;
+
         if (nativeColours) {
             fasterColour = vec4(0, .123, .822, .75);
             slowerColour = vec4(.869, 0.117, 0.117, .784);
         }
 
-        // showTime is when the UI element was shown
-        visible = Time::Now < showTime + displayDuration;
-        
         // Format delta text with milliseconds
         splitDeltaText = Time::Format(Math::Abs(splitDelta));
         if (splitDelta > 0) {
@@ -58,11 +62,6 @@ namespace GUI {
         } else {  // Exactly 0
             currentColour = neutralColour;
         }
-
-        if (!UI::IsGameUIVisible() && !showWhenGuiHidden) return;
-        if (font == 0) return;
-        if (!enabled) return;
-        if (!visible) return;
 
         float h = float(Draw::GetHeight());
         float w = float(Draw::GetWidth());
@@ -114,7 +113,7 @@ namespace GUI {
 
         if (textShadow) {
             nvg::FillColor(shadowColour);
-            nvg::TextBox(x - padding + shadowX, y + boxHeight / 2 + shadowY + 3, boxWidth, splitDeltaText);
+            nvg::TextBox(x - padding + shadowOffsetX, y + boxHeight / 2 + shadowOffsetY + 3, boxWidth, splitDeltaText);
         }
         nvg::FillColor(textColour);
         nvg::TextBox(x - padding, y + boxHeight / 2 + 3, boxWidth, splitDeltaText);

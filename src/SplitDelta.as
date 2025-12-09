@@ -18,7 +18,6 @@ namespace SplitDelta {
     
     void Update() {
         auto app = GetApp();
-        auto network = cast<CTrackManiaNetwork>(app.Network);
         
         // Not in a valid race state
         if (app.RootMap is null || app.CurrentPlayground is null) {
