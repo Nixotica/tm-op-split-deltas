@@ -47,9 +47,17 @@ namespace SplitDelta {
         lastCpCount = currentCpCount;
         
         // Load PB times if we don't have them yet OR if the PB has been updated
-        if (player.BestTime > 0 && (pbCheckpointTimes.Length == 0 || player.BestTime != lastBestTime)) {
+        if (player.BestTime > 0 && (pbCheckpointTimes.Length == 0 || uint(player.BestTime) != lastBestTime)) {
             LoadPBTimes(player);
             lastBestTime = player.BestTime;
+        }
+        
+        // Detect finish to guarantee PB update within current session
+        auto playground = cast<CSmArenaClient>(app.CurrentPlayground);
+        if (playground is null) return;
+        auto sequence = playground.GameTerminals[0].UISequence_Current;
+        if (sequence == CGamePlaygroundUIConfig::EUISequence::Finish) {
+            Reset();
         }
     }
     
