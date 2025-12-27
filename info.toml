@@ -2,7 +2,7 @@
 name = "Split Deltas"
 author = "Nixotica"
 category = "Overlay"
-version = "1.0.3"
+version = "1.0.4"
 
 [script]
 dependencies = [ "MLFeedRaceData" ]
