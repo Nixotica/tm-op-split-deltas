@@ -27,10 +27,7 @@ namespace SplitDelta {
         
         // Get race data from MLFeed
         auto raceData = MLFeed::GetRaceData_V4();
-        if (raceData.SortedPlayers_Race.Length == 0) return;
-        
-        // Get the local player (usually first in sorted list)
-        MLFeed::PlayerCpInfo_V4@ player = cast<MLFeed::PlayerCpInfo_V4>(raceData.SortedPlayers_Race[0]);
+        auto player = raceData.GetPlayer_V4(MLFeed::LocalPlayersName);
         if (player is null) return;
         
         // Check if we hit a new checkpoint
@@ -61,7 +58,7 @@ namespace SplitDelta {
         }
     }
     
-    void OnCheckpointCrossed(MLFeed::PlayerCpInfo_V4@ player, uint cpIndex) {
+    void OnCheckpointCrossed(const MLFeed::PlayerCpInfo_V4@ player, uint cpIndex) {
         // Get current race time (total time since run start)
         int currentCpTime = player.cpTimes[cpIndex];
 
@@ -97,7 +94,7 @@ namespace SplitDelta {
         GUI::ShowSplitDelta(currentSplitDelta);
     }
     
-    void LoadPBTimes(MLFeed::PlayerCpInfo_V4@ player) {
+    void LoadPBTimes(const MLFeed::PlayerCpInfo_V4@ player) {
         // Try to get PB times from the player's best race
         if (player.BestRaceTimes.Length > 0) {
             pbCheckpointTimes.Resize(0);
