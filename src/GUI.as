@@ -51,7 +51,7 @@ namespace GUI {
         } else if (splitDelta < 0) {
             splitDeltaText = "-" + splitDeltaText;
         } else {
-            splitDeltaText = "0";
+            splitDeltaText = "-0:00.000";
         }
         
         // Determine color based on split delta (negative = gained time = green)
