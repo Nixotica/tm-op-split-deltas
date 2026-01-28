@@ -63,8 +63,8 @@ namespace GUI {
             currentColour = neutralColour;
         }
 
-        float h = float(Draw::GetHeight());
-        float w = float(Draw::GetWidth());
+        float h = float(Display::GetHeight());
+        float w = float(Display::GetWidth());
         if (h == 0 || w == 0) return;
         
         float scaleX, scaleY, offsetX = 0;
